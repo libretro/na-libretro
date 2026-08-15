@@ -25,18 +25,20 @@ jobs:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: make platform=android-x86_64
 
+      - name: Rename x86_64 library
+        run: mv na_libretro_android.so na_libretro_android_x86_64.so
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: na_libretro_android_x86_64
-          path: na_libretro_android.so
-
-      - name: Rename x86_64 library
-        run: mv na_libretro_android.so na_libretro_android_x86_64.so
+          path: na_libretro_android_x86_64.so
 
       - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: na_libretro_android_x86_64.so
+          overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
