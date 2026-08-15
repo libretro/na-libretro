@@ -30,3 +30,11 @@ jobs:
         with:
           name: na_libretro_android_arm
           path: na_libretro_android.so
+
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: na_libretro_android.so
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
